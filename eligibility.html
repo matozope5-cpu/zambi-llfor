@@ -171,7 +171,7 @@
 
         /* ----- FORM (dynamic error spacing) ----- */
         .form-group {
-            margin-bottom: 12px;  /* reduced base spacing */
+            margin-bottom: 12px;
             position: relative;
         }
 
@@ -238,10 +238,10 @@
             display: flex;
             align-items: center;
             gap: 4px;
-            min-height: 0;        /* no reserved space */
+            min-height: 0;
         }
         .error-message:empty {
-            display: none;         /* completely hidden when no error */
+            display: none;
         }
         .error-message i {
             font-size: 0.7rem;
@@ -254,7 +254,6 @@
             margin-left: 8px;
         }
 
-        /* When error is shown, add some bottom margin to group */
         .form-group:has(.error-message:not(:empty)) {
             margin-bottom: 16px;
         }
@@ -321,17 +320,24 @@
             font-weight: 500;
         }
 
-        /* ----- LOADING OVERLAY ----- */
+        /* ----- LOADING OVERLAY (PERFECTLY CENTERED) ----- */
         .loading-overlay {
             position: fixed;
-            inset: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
             background: rgba(8, 40, 18, 0.5);
             backdrop-filter: blur(5px);
             display: none;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             z-index: 1000;
-            padding: 16px;
+            padding: 0; /* ensure no offset */
+            margin: 0;
+            box-sizing: border-box;
         }
 
         .loading-popup {
@@ -339,7 +345,8 @@
             border-radius: 24px;
             padding: 32px 24px;
             max-width: 280px;
-            width: 100%;
+            width: 90%;
+            margin: 0 auto;
             text-align: center;
             box-shadow: 0 20px 35px rgba(0,0,0,0.15);
             border: 1px solid rgba(230, 81, 0, 0.15);
@@ -472,7 +479,7 @@
     </form>
 </div>
 
-<!-- Loading Popup Overlay -->
+<!-- Loading Popup Overlay (perfectly centered) -->
 <div class="loading-overlay" id="loadingOverlay">
     <div class="loading-popup">
         <div class="loading-spinner"></div>
@@ -589,7 +596,6 @@
         submitBtn.addEventListener('click', handleSubmit);
         form.addEventListener('submit', handleSubmit);
 
-        // Real-time clear error on input
         nameInput.addEventListener('input', function() {
             if (nameRegex.test(this.value.trim())) {
                 this.classList.remove('error');
