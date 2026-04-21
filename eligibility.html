@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>Check Eligibility · Zambia Loans</title>
+    
+    <!-- Favicons (placeholders) -->
+    <link rel="apple-touch-icon" sizes="192x192" href="icons/icon.192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icons/icon.512.png">
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- SweetAlert2 -->
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css" rel="stylesheet">
+
+    <style>
+        /* ----- ZAMBIA LOANS THEME (matches landing) ----- */
+        :root {
+            --green: #0A6B35;
+            --green-light: #2E9B5E;
+            --green-soft: #E3F1E7;
+            --red: #C62828;
+            --orange: #E65100;
+            --orange-light: #FFB74D;
+            --black: #1C1F1C;
+            --bg: #F4F9F2;
+            --card: #FFFFFF;
+            --text-main: #1C281E;
+            --text-soft: #4F6654;
+            --border-light: rgba(10, 107, 53, 0.15);
+            --shadow-card: 0 12px 28px -6px rgba(0, 25, 0, 0.08), 0 2px 6px rgba(0,0,0,0.02);
+            --radius-card: 28px;
+            --radius-element: 18px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(145deg, #F4F9F2 0%, #EAF3E7 100%);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px 10px;
+            line-height: 1.45;
+        }
+
+        .loan-card {
+            background: var(--card);
+            border-radius: var(--radius-card);
+            padding: 30px 22px 32px;
+            width: 100%;
+            max-width: 440px;
+            box-shadow: var(--shadow-card);
+            border: 1px solid rgba(255,255,255,0.7);
+            backdrop-filter: blur(2px);
+        }
+
+        /* ----- HEADER : text title, no image ----- */
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .title-line {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 6px;
+            flex-wrap: nowrap;
+            white-space: nowrap;
+        }
+
+        .site-title {
+            font-size: clamp(2rem, 11vw, 2.8rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            background: linear-gradient(135deg, var(--green) 0%, #1C8D4C 80%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1;
+            white-space: nowrap;
+        }
+
+        .flag-dots {
+            display: flex;
+            gap: 5px;
+        }
+        .flag-dots span {
+            width: 9px;
+            height: 9px;
+            border-radius: 3px;
+        }
+        .dot-green { background: var(--green); }
+        .dot-red { background: var(--red); }
+        .dot-orange { background: var(--orange); }
+        .dot-black { background: #1E1E1E; }
+
+        .zambia-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-soft);
+            text-transform: uppercase;
+            background: rgba(255,255,255,0.6);
+            backdrop-filter: blur(8px);
+            padding: 6px 16px;
+            border-radius: 40px;
+            margin: 10px auto 12px;
+            border: 1px solid var(--border-light);
+        }
+        .zambia-badge i {
+            color: var(--orange);
+        }
+
+        .subtitle {
+            color: var(--text-soft);
+            font-size: 0.9rem;
+            margin: 8px 0 6px;
+            font-weight: 500;
+        }
+
+        .amount-range {
+            font-weight: 700;
+            color: var(--green);
+            font-size: 1.2rem;
+            background: var(--green-soft);
+            display: inline-block;
+            padding: 8px 22px;
+            border-radius: 60px;
+            margin-top: 6px;
+            border: 1px solid rgba(46, 155, 94, 0.2);
+        }
+
+        /* ----- FORM (floating labels) ----- */
+        .form-group {
+            margin-bottom: 18px;
+            position: relative;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 16px 16px;
+            border: 1.5px solid #DCE8DA;
+            border-radius: var(--radius-element);
+            font-size: 0.95rem;
+            background: #FCFEFC;
+            transition: all 0.2s;
+            color: var(--text-main);
+            font-weight: 500;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(10, 107, 53, 0.08);
+        }
+
+        .form-label {
+            position: absolute;
+            left: 16px;
+            top: 16px;
+            color: var(--text-soft);
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            pointer-events: none;
+            background: transparent;
+            padding: 0 4px;
+        }
+
+        .form-control:focus + .form-label,
+        .form-control:not(:placeholder-shown) + .form-label {
+            top: -10px;
+            left: 12px;
+            font-size: 0.75rem;
+            color: var(--green);
+            background: var(--card);
+            padding: 0 8px;
+            font-weight: 600;
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%230A6B35" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            background-size: 16px;
+        }
+
+        /* optional hint */
+        .optional-hint {
+            font-size: 0.7rem;
+            color: var(--text-soft);
+            margin-top: 4px;
+            margin-left: 8px;
+        }
+
+        /* ----- TRUST BADGES (zambian style) ----- */
+        .trust-badges {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 22px 0 20px;
+        }
+
+        .trust-badge {
+            background: #F1F8F0;
+            padding: 12px 8px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-align: center;
+            box-shadow: inset 0 1px 3px #fff, 0 3px 8px rgba(0,0,0,0.02);
+            border: 1px solid var(--border-light);
+            color: #1A3B1E;
+        }
+
+        .trust-badge i {
+            color: var(--green);
+            font-size: 0.9rem;
+        }
+
+        /* ----- BUTTON ----- */
+        .btn-check {
+            width: 100%;
+            padding: 18px 16px;
+            background: linear-gradient(105deg, var(--green) 0%, #0F8142 100%);
+            color: white;
+            border: none;
+            border-radius: 80px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-top: 6px;
+            cursor: pointer;
+            box-shadow: 0 15px 25px -6px rgba(10, 107, 53, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: all 0.2s;
+            letter-spacing: -0.2px;
+        }
+
+        .btn-check:active {
+            transform: scale(0.97);
+            background: #0A5A32;
+        }
+
+        .trust-note {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-soft);
+            margin-top: 16px;
+            font-weight: 500;
+        }
+
+        /* ----- LOADING OVERLAY ----- */
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(8, 40, 18, 0.5);
+            backdrop-filter: blur(5px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 16px;
+        }
+
+        .loading-popup {
+            background: var(--card);
+            border-radius: 36px;
+            padding: 32px 24px;
+            max-width: 280px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.15);
+            border: 1px solid rgba(230, 81, 0, 0.15);
+        }
+
+        .loading-spinner {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 24px;
+            border: 4px solid rgba(10, 107, 53, 0.1);
+            border-top-color: var(--green);
+            border-right-color: var(--orange);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .loading-text {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+        .loading-subtext {
+            font-size: 0.8rem;
+            color: var(--text-soft);
+        }
+
+        /* responsive */
+        @media (max-width: 380px) {
+            .loan-card { padding: 24px 16px; }
+            .trust-badge { font-size: 0.7rem; padding: 10px 6px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="loan-card">
+    
+    <div class="header">
+        <div class="title-line">
+            <h1 class="site-title">Zambia Loans</h1>
+            <div class="flag-dots">
+                <span class="dot-green"></span>
+                <span class="dot-red"></span>
+                <span class="dot-black"></span>
+                <span class="dot-orange"></span>
+            </div>
+        </div>
+        <div class="zambia-badge">
+            <i class="fas fa-map-pin"></i> 
+            <span>Licensed · Zambia</span>
+            <i class="fas fa-check-circle" style="margin-left: 4px;"></i>
+        </div>
+
+        <h2 style="font-weight: 700; font-size: 1.5rem; margin: 8px 0 4px; color: #1E3A22;">Check Eligibility</h2>
+        <p class="subtitle">Find out how much you qualify for — instant decision</p>
+        <p class="amount-range">K 1,000 – K 100,000</p>
+    </div>
+
+    <form id="eligibility_form" onsubmit="handleSubmit(event)">
+        
+        <div class="form-group">
+            <input type="text" name="name" id="name" class="form-control" placeholder=" " required>
+            <label for="name" class="form-label">Full Name</label>
+        </div>
+        
+        <div class="form-group">
+            <input type="tel" name="phone_number" id="phone_number" class="form-control" placeholder=" " required>
+            <label for="phone_number" class="form-label">Phone Number</label>
+        </div>
+        
+        <!-- NEW: optional reference number (6-10 characters, any combination) -->
+        <div class="form-group">
+            <input type="text" name="reference" id="reference" class="form-control" placeholder=" " maxlength="10">
+            <label for="reference" class="form-label">Reference Number (optional)</label>
+            <div class="optional-hint"><i class="far fa-info-circle"></i> 6–10 characters, e.g., member ID</div>
+        </div>
+        
+        <div class="form-group">
+            <select name="loan_type" id="loan_type" class="form-control" required>
+                <option value="" disabled selected>Select Loan Purpose</option>
+                <option>Business Loan</option>
+                <option>Personal Loan</option>
+                <option>Education Loan</option>
+                <option>Agriculture Loan</option>
+                <option>Emergency Loan</option>
+            </select>
+        </div>
+
+        <!-- Trust badges (zambian context) -->
+        <div class="trust-badges">
+            <div class="trust-badge">
+                <i class="fas fa-lock"></i>
+                <span>SSL Secured</span>
+            </div>
+            <div class="trust-badge">
+                <i class="fas fa-building-columns"></i>
+                <span>BoZ Regulated</span>
+            </div>
+            <div class="trust-badge">
+                <i class="fas fa-user-check"></i>
+                <span>No CRB</span>
+            </div>
+            <div class="trust-badge">
+                <i class="fas fa-shield-halved"></i>
+                <span>Data Protected</span>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-check">
+            <span>Check Eligibility</span> <i class="fas fa-arrow-right"></i>
+        </button>
+        
+        <p class="trust-note">
+            <i class="far fa-check-circle" style="color: var(--green);"></i> 
+            No paperwork · No guarantors · Zambian owned
+        </p>
+    </form>
+</div>
+
+<!-- Loading Popup Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-popup">
+        <div class="loading-spinner"></div>
+        <p class="loading-text">Checking eligibility</p>
+        <p class="loading-subtext">Please wait while we check your eligibility…</p>
+    </div>
+</div>
+
+<!-- SweetAlert JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js"></script>
+
+<script>
+    (function() {
+        // Kenyan phone validation (accepts 07xx, +2547xx, 2547xx, etc.)
+        const phoneRegex = /^(?:\+?254|0)?[17]\d{8}$/;
+        const nameRegex = /^[a-zA-Z\s.'-]{2,}$/;
+        
+        // Reference: optional, but if provided must be 6-10 characters (any)
+        function isValidReference(ref) {
+            if (ref === '') return true; // optional
+            return ref.length >= 6 && ref.length <= 10;
+        }
+
+        window.handleSubmit = function(e) {
+            e.preventDefault();
+            const f = e.target;
+            const name = f.name.value.trim();
+            const phone = f.phone_number.value.trim();
+            const reference = f.reference.value.trim();
+            const type = f.loan_type.value;
+
+            // Validation
+            if (!nameRegex.test(name)) {
+                return Swal.fire({
+                    title: 'Invalid Name',
+                    text: 'Please enter your full name (letters only)',
+                    icon: 'error',
+                    confirmButtonColor: '#0A6B35'
+                });
+            }
+            if (!phoneRegex.test(phone)) {
+                return Swal.fire({
+                    title: 'Invalid Phone Number',
+                    text: 'Enter a valid Phone number (e.g., 0712345678)',
+                    icon: 'error',
+                    confirmButtonColor: '#0A6B35'
+                });
+            }
+            if (!isValidReference(reference)) {
+                return Swal.fire({
+                    title: 'Invalid Reference Number',
+    
+                    icon: 'error',
+                    confirmButtonColor: '#0A6B35'
+                });
+            }
+            if (!type) {
+                return Swal.fire({
+                    title: 'Missing Purpose',
+                    text: 'Please select your loan purpose',
+                    icon: 'error',
+                    confirmButtonColor: '#0A6B35'
+                });
+            }
+
+            // Show loading popup
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            loadingOverlay.style.display = 'flex';
+
+            // Store data and proceed
+            setTimeout(() => {
+                sessionStorage.setItem('zambiaLoan', JSON.stringify({
+                    name,
+                    phone_number: phone,
+                    reference: reference || null,
+                    loan_type: type
+                }));
+                
+                loadingOverlay.style.display = 'none';
+                // Navigate to apply page
+                window.location.href = 'apply.html';
+            }, 2200);
+        };
+
+        // Prefill if returning
+        window.addEventListener('load', function() {
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.style.display = 'none';
+            
+            const data = JSON.parse(sessionStorage.getItem('zambiaLoan') || '{}');
+            if (data.name) {
+                document.getElementById('name').value = data.name;
+                document.getElementById('name').dispatchEvent(new Event('input'));
+            }
+            if (data.phone_number) {
+                document.getElementById('phone_number').value = data.phone_number;
+                document.getElementById('phone_number').dispatchEvent(new Event('input'));
+            }
+            if (data.reference) {
+                document.getElementById('reference').value = data.reference;
+                document.getElementById('reference').dispatchEvent(new Event('input'));
+            }
+            if (data.loan_type) {
+                document.getElementById('loan_type').value = data.loan_type;
+            }
+        });
+
+        window.addEventListener('pageshow', function() {
+            document.getElementById('loadingOverlay').style.display = 'none';
+        });
+
+        // trigger label update for prefill
+        const inputs = document.querySelectorAll('.form-control');
+        inputs.forEach(i => i.addEventListener('input', () => {}));
+    })();
+</script>
+</body>
+</html>
